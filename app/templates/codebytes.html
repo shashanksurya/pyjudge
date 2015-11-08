@@ -1,0 +1,114 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>[cheetah]</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" title="style" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+            
+          <h1><img src="images/cheetah.png"><a href="index.html">[<i>cheetah</i><span class="logo_colour" style="font-size:larger">]</span></a> </h1> 
+          
+        </div>
+          </br></br></br>
+          <p class="txright"> <a href="login.html">Login</a><a href="login.html">|Sign Up</a> </p>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Home</a></li>
+          <li class="selected"><a href="codebytes.html">codeBytes</a></li>
+          <li><a href="developers.html">Developers</a></li>
+          <li><a href="login.html">Login</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      <div class="sidebar">
+        <!-- insert your sidebar items here -->
+        <h3>Latest News</h3>
+        <h4>New Website Launched</h4>
+        <h5>September 12th, 2014</h5>
+        <p>2014 sees the redesign of our website. Take a look around and let us know what you think.<br /><a href="#">Read more</a></p>
+        <p></p>
+       
+        <h3>Useful Links</h3>
+        <ul>
+          <li><a href="#">How to register</a></li>
+          <li><a href="#">Participate in a contest</a></li>
+          <li><a href="#">Solve previous problems</a></li>
+          <li><a href="#">Win free T-shirts!</a></li>
+        </ul>
+        <h3>Search</h3>
+        <form method="post" action="#" id="search_form">
+          <p>
+            <input class="search" type="text" name="search_field" value="Enter keywords....." />
+            <input name="search" type="image" style="border: 0; margin: 0 0 -9px 5px;" src="style/search.png" alt="Search" title="Search" />
+          </p>
+        </form>
+      </div>
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1></h1>
+        <p>On this page, you find tutorials on how to solve some of the most interesting problems. Keep checking for more intersting stuff!</p>
+        <h2>Importance of Algorithms</h2>
+        <p>The first step towards an understanding of why the study and knowledge of algorithms are so important is to define exactly what we mean by an algorithm. According to the popular algorithms textbook Introduction to Algorithms (Second Edition by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein), "an algorithm is any well-defined computational procedure that takes some value, or set of values, as input and produces some value, or set of values as output." In other words, algorithms are like road maps for accomplishing a given, well-defined task. So, a chunk of code that calculates the terms of the Fibonacci sequence is an implementation of a particular algorithm. Even a simple function for adding two numbers is an algorithm in a sense, albeit a simple one.</p>
+        <p>Some algorithms, like those that compute the Fibonacci sequences, are intuitive and may be innately embedded into our logical thinking and problem solving skills. However, for most of us, complex algorithms are best studied so we can use them as building blocks for more efficient logical problem solving in the future. In fact, you may be surprised to learn just how many complex algorithms people use every day when they check their e-mail or listen to music on their computers. This article will introduce some basic ideas related to the analysis of algorithms, and then put these into practice with a few examples illustrating why it is important to know about algorithms. </p>
+        
+<p class="txright">~Reposted from TopCoder</p>
+          <h2>Sieve Of Eratosthenes for finding primes in a given range
+          </h2>
+          <p>There is a lot of confusion about this problem. It is *not* about finding any old algorithm to find a series of primes; Sieve Of Eratosthenes is a very *specific* algorithm for finding all the prime numbers up to a given number, n. Anything that sharply deviates from it is not the S of E, no matter how good that new algorithm is at finding primes.</p>
+          <h4>Algorithm</h4>
+          <p><ul><li>On paper, write the numbers 2...n</li>
+<li>Circle the first number, 2. Call it P</li>
+<li>Strike out all the P's multiples (for 2 it's 4, 6, 8, ...) by counting up from P in increments of P</li>
+<li>Circle the smallest number not yet struck out. Call it P, and repeat from the previous step</li>
+<li>When there's no more numbers to circle, stop. You've now circled all the prime numbers up to n</li></ul>
+          </p>
+        <h4>Source Code</h4>
+        <p class="code"> int main(int argc, char **argv) {
+        int     top_value = 100;
+        int     count     = top_value - 1;
+        int     *array    = calloc( top_value + 1, sizeof(int));
+        int     i, prime, multiple;
+        /* mark each int as potentially prime                                    */
+        for (i=2; i <= top_value; ++i) 
+                array[i] = 1;
+        /* for each starting prime, mark its every multiple as non-prime         */
+        for (prime = 2; prime <= top_value; ++prime)
+        {
+                if (array[prime])
+                        for (multiple = 2*prime; multiple <= top_value; multiple += prime)
+                                if (array[multiple]) {
+                                        array[multiple] = 0;
+                                        --count;
+                                }
+        }
+        /* Now that we have marked all multiples of primes as non-prime, print   */
+        /* the remaining numbers that fell through the sieve, and are thus prime */
+        for (i=2; i <= top_value; ++i)
+        {
+                if (array[i])
+                        printf("%d ", i);
+        }
+        printf("\n\n %d primes up to %d found.\n", count, top_value);
+        exit(0);
+ }</p><p class="txright">~Reposted from c2.com</p>
+      </div>
+    </div>
+    <div id="footer">
+      Copyright &copy; cheetah | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a>
+    </div>
+  </div>
+</body>
+</html>

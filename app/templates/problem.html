@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>[cheetah]</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+   <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css" title="style" />
+
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+            
+          <h1><img src="/static/images/cheetah.png"><a href="index.html">[<i>cheetah</i><span class="logo_colour" style="font-size:larger">]</span></a> </h1> 
+          
+        </div>
+          </br></br></br>
+            <p class="txright"> Logged in as: {{session['user']}}|<a href="/admin/logout">Logout</a></p>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="/user/stats">Home</a></li>
+          <li><a href="/user/register">Register</a></li>
+          <li class="selected"><a href="#">Contest</a></li>
+          
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      <div class="sidebar">
+        <!-- insert your sidebar items here -->
+        <h3>Latest News</h3>
+        <h4>New Website Launched</h4>
+        <h5>September 12th, 2014</h5>
+        <p>2014 sees the redesign of our website. Take a look around and let us know what you think.<br /><a href="#">Read more</a></p>
+        <p></p>
+       
+      </div>
+      <div id="content">
+        <!-- insert the page content here -->
+        
+        
+        
+          <form action="/user/test" method="post">
+          <div class="form_settings">
+            <p align="center"><table><tr>
+            <td>Select Contest</td><td><select id="contestids" name="contestids" onchange="contest_load()">
+
+            <option value="select" selected="selected">Select</option>
+            {% for post in contests %}
+            
+            <option value="{{ post.cid }}">{{ post.cid }}</option>
+            {% endfor %}
+            </select>
+            </td></tr>
+           </table>
+             <p style="padding-top: 15px"><span>&nbsp;</span><input class="submit" type="submit" name="contact_submitted" value="submit" /></p>
+            </p>
+          </div>
+        </form>
+        
+       
+      </div>
+    </div>
+    <div id="footer">
+      Copyright &copy; cheetah | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a>
+    </div>
+  </div>
+</body>
+</html>

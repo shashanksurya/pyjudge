@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>[cheetah] Arena</title>
+  <script src="http://ajaxorg.github.io/ace-builds/src/ace.js"></script> 
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script>
+
+var seconds = 3600;
+
+function setTimercheck()
+    {
+      var cid = document.getElementById("cid").value;
+      var e=document.getElementById("titles");
+      //var str=e.options[e.selectedIndex].value;
+      //alert(str+cid)
+      var xmlhttp=new XMLHttpRequest();
+      xmlhttp.onreadystatechange=function()
+      {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+        xi=xmlhttp.responseText;
+        }
+      }
+      xmlhttp.open("GET","/user/arena/timeout"+"/"+cid,true);
+      xmlhttp.send();
+    }
+
+
+function secondPassed() {
+    var minutes = Math.round((seconds - 30)/60);
+    var remainingSeconds = seconds % 60;
+    if (remainingSeconds < 10) {
+        remainingSeconds = "0" + remainingSeconds;  
+    }
+    document.getElementById('timer').innerHTML = "Timer: "+minutes + ":" + remainingSeconds+" remaining!";
+    if (seconds == 0) {
+        clearInterval(countdownTimer);
+       setTimercheck();
+       alert("Time's up!");
+       document.getElementById('body_html').innerHTML = "<h1>The contest is over!</h1>";
+
+        
+    } else {
+        seconds--;
+    }
+}
+
+ var countdownTimer = setInterval('secondPassed()', 1000);
+
+  function question_load()
+    {
+      var cid = document.getElementById("cid").value;
+      var e=document.getElementById("titles");
+      var str=e.options[e.selectedIndex].value;
+      //alert(str+cid)
+      var xmlhttp=new XMLHttpRequest();
+      xmlhttp.onreadystatechange=function()
+      {
+        if (xmlhttp.readyState==4 && xmlhttp.status==200)
+        {
+          document.getElementById("probstmt").innerHTML=xmlhttp.responseText;
+        }
+      }
+      xmlhttp.open("GET","/user/arena/"+str+"/"+cid,true);
+      xmlhttp.send();
+    }
+
+    function get_editor()
+    {
+      
+       var cid = document.getElementById("cid").value;
+       var e=document.getElementById("titles");
+      var str=e.options[e.selectedIndex].value;
+      
+      if($('input[name="sub_choice"]:checked').val()=="form")
+       {
+        alert("inside form");
+        var myCode = editor.getSession().getValue();
+        
+       }
+
+       else if($('input[name="sub_choice"]:checked').val()=="upload")
+        {
+
+        }
+      
+      //alert(myCode)
+      return false;
+    }
+
+    function submit_option()
+    {
+      //alert("Form")
+       if($('input[name="sub_choice"]:checked').val()=="form")
+       $("#uploader").hide();
+       else if($('input[name="sub_choice"]:checked').val()=="upload")
+        $("#uploader").show();
+    }
+    
+  </script>
+
+  <style>
+    #ta { 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        right: 0; 
+        bottom: 0;
+        border-style: solid;
+        border-width: 3px;
+
+    }
+
+    .txright
+{
+  text-align:right; 
+  font-size: medium;
+  font-weight:bolder;
+}
+  </style>
+</head>
+<body bgcolor="#D0D0D0" id="body_html">
+<h2 align="center">Contest Arena</h2>
+<div id="timer" align="center" style="color:green"><b>Timer: 00:00</b></div>
+<p class="txright"> Logged in as: {{session['user']}}|<a href="/admin/logout">Logout</a></p>
+  <form id="myForm" name="myForm" method="POST" action="/user/arena/verify" enctype="multipart/form-data">
+  <div id="question"> <b>Select Problem</b> </br>
+  <input type="hidden" id="cid" name="cid" value='{{ questions[0].cid }}'>
+  <select id="titles" name="titles" onchange="question_load()">
+            <option value="select" selected="selected">Select</option>
+            {% for post in questions %}
+             <option value="{{ post.qtitle }}">{{ post.qtitle }}</option>
+            {% endfor %}
+            </select>
+    </div>
+    <div id="probstmt"></div>
+    <div style="position:relative;height:700px;width:800px">
+      <textarea id="ta" name="ta">text</textarea> 
+    </div>
+    <input type="radio" name="sub_choice" id="sub_choice" value="form" onclick="submit_option()">Submit from editor
+<br>
+<input type="radio" name="sub_choice" id="sub_choice" value="upload" checked  onclick="submit_option()">Upload from file</br></br>
+   <div id="uploader" name="uploader">
+   Upload a file: <input type="file" name="datafile" id="datafile" accept=".py">
+   </div>
+   
+    <input type="submit" value="Submit" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ </br></br>
+  </form>
+</body>
+<script>
+  var textareaEl = document.getElementById("ta");
+  // update textarea value before submitting
+  var form = textareaEl.form
+  form.addEventListener("submit", function() {    
+    textareaEl.style.visibility = "hidden"
+    textareaEl.value = editor.getValue()
+    form.appendChild(textareaEl)
+  });
+  // create editor and set id for it
+  editor = ace.edit(textareaEl)
+  editor.container.id = "ta"
+  editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/python");
+    editor.setOptions({
+       fontSize: "13pt"
+});
+  // add a keyboard shortcut for submitting
+  editor.commands.addCommand({
+    name: "submit",
+    exec: function() {
+      form.submit()
+    },
+    bindKey: "Ctrl-Enter"
+  })
+</script>
+
+
+<script type="text/javascript">
+    var frm = $('#myForm');
+    
+    frm.submit(function (ev) {
+      if($('input[name="sub_choice"]:checked').val()=="form")
+       {
+        //alert("inside form");
+         $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: frm.serialize(),
+            success: function (data) {
+                alert(data);
+            }
+        });
+        
+       }
+
+       else if($('input[name="sub_choice"]:checked').val()=="upload")
+        {
+          var fd = new FormData(document.getElementById("myForm"));
+          var e=document.getElementById("titles");
+          var str=e.options[e.selectedIndex].value;
+          //fd.append("qtitle",str);
+          $.ajax({
+            type: frm.attr('method'),
+            url: frm.attr('action'),
+            data: fd,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                alert(data);
+            }
+        });
+        }
+       return false;
+    });
+</script>
+
+</html>
